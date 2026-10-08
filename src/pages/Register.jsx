@@ -319,13 +319,6 @@ export default function Register() {
               Already have an account?
             </span>
 
-            <Link
-              to="/login"
-              className="font-semibold text-[#5969E7] transition hover:text-[#4658D8]"
-            >
-              Sign in
-            </Link>
-
           </div>
 
         </section>

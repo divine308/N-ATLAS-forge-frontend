@@ -321,13 +321,6 @@ export default function Login() {
               Don&apos;t have an account?
             </span>
 
-            <Link
-              to="/register"
-              className="font-semibold text-[#5969E7] transition hover:text-[#4658D8]"
-            >
-              Create Account
-            </Link>
-
           </div>
 
         </section>
