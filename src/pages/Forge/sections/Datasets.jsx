@@ -172,11 +172,11 @@ function SchemaPreview({
   }
 
   return (
-    <div className="overflow-hidden border border-[#2C3240]">
-      <div className="grid grid-cols-[1.5fr_1fr_0.7fr] border-b border-[#2C3240] bg-[#11151E] px-4 py-3 font-mono text-[8px] uppercase tracking-[0.16em] text-[#697183]">
-        <span>Field</span>
-        <span>Type</span>
-        <span>Presence</span>
+    <div className="w-full max-w-full overflow-hidden border border-[#2C3240]">
+      <div className="grid grid-cols-[minmax(0,1.5fr)_minmax(70px,1fr)_minmax(65px,0.7fr)] gap-0 border-b border-[#2C3240] bg-[#11151E] px-3 py-3 font-mono text-[8px] uppercase tracking-[0.16em] text-[#697183] sm:px-4">
+        <span className="min-w-0">Field</span>
+        <span className="min-w-0">Type</span>
+        <span className="min-w-0">Presence</span>
       </div>
 
       {fields.map(
@@ -201,18 +201,18 @@ function SchemaPreview({
           return (
             <div
               key={field}
-              className="grid grid-cols-[1.5fr_1fr_0.7fr] border-b border-[#2C3240] px-4 py-3 text-xs last:border-b-0"
+              className="grid grid-cols-[minmax(0,1.5fr)_minmax(70px,1fr)_minmax(65px,0.7fr)] gap-0 border-b border-[#2C3240] px-3 py-3 text-xs last:border-b-0 sm:px-4"
             >
-              <span className="truncate font-mono text-[#D5D9E2]">
+              <span className="min-w-0 overflow-hidden break-all font-mono text-[#D5D9E2]">
                 {field}
               </span>
 
-              <span className="text-[#858D9D]">
+              <span className="min-w-0 overflow-hidden break-words text-[#858D9D]">
                 {details?.type ||
                   "unknown"}
               </span>
 
-              <span className="font-mono text-[9px] text-[#697183]">
+              <span className="min-w-0 font-mono text-[9px] text-[#697183]">
                 {percentage}%
               </span>
             </div>
@@ -241,15 +241,25 @@ function RecordValue({
   if (
     typeof value === "object"
   ) {
+    let serialized = "";
+
+    try {
+      serialized =
+        JSON.stringify(value);
+    } catch {
+      serialized =
+        "[unserializable value]";
+    }
+
     return (
-      <span className="font-mono text-[10px] text-[#858D9D]">
-        {JSON.stringify(value)}
+      <span className="block max-w-full whitespace-pre-wrap break-all font-mono text-[10px] text-[#858D9D]">
+        {serialized}
       </span>
     );
   }
 
   return (
-    <span className="text-[#B7BDCA]">
+    <span className="block max-w-full whitespace-pre-wrap break-words text-[#B7BDCA]">
       {String(value)}
     </span>
   );
@@ -281,10 +291,10 @@ function RecordsPreview({
 
   if (loading) {
     return (
-      <div className="flex items-center gap-3 py-12 font-mono text-[9px] uppercase tracking-[0.16em] text-[#697183]">
+      <div className="flex min-w-0 items-center gap-3 py-12 font-mono text-[9px] uppercase tracking-[0.16em] text-[#697183]">
         <Loader2
           size={13}
-          className="animate-spin text-[#7181FF]"
+          className="shrink-0 animate-spin text-[#7181FF]"
         />
         Loading records
       </div>
@@ -293,18 +303,18 @@ function RecordsPreview({
 
   if (!records.length) {
     return (
-      <div className="border border-[#2C3240] bg-[#11151E] px-5 py-10 text-center font-mono text-[9px] uppercase tracking-[0.14em] text-[#596174]">
+      <div className="w-full max-w-full overflow-hidden border border-[#2C3240] bg-[#11151E] px-5 py-10 text-center font-mono text-[9px] uppercase tracking-[0.14em] text-[#596174]">
         No records match this search.
       </div>
     );
   }
 
   return (
-    <div className="overflow-x-auto border border-[#2C3240]">
-      <table className="w-full min-w-[720px] border-collapse">
+    <div className="w-full max-w-full overflow-x-auto overscroll-x-contain border border-[#2C3240]">
+      <table className="w-full min-w-[680px] border-collapse">
         <thead>
           <tr className="border-b border-[#2C3240] bg-[#11151E]">
-            <th className="w-12 px-4 py-3 text-left font-mono text-[8px] uppercase tracking-[0.14em] text-[#596174]">
+            <th className="w-12 px-3 py-3 text-left font-mono text-[8px] uppercase tracking-[0.14em] text-[#596174] sm:px-4">
               #
             </th>
 
@@ -312,9 +322,11 @@ function RecordsPreview({
               (column) => (
                 <th
                   key={column}
-                  className="px-4 py-3 text-left font-mono text-[8px] uppercase tracking-[0.14em] text-[#697183]"
+                  className="max-w-[220px] px-3 py-3 text-left font-mono text-[8px] uppercase tracking-[0.14em] text-[#697183] sm:px-4"
                 >
-                  {column}
+                  <span className="block max-w-[220px] overflow-hidden break-all">
+                    {column}
+                  </span>
                 </th>
               )
             )}
@@ -326,9 +338,9 @@ function RecordsPreview({
             (record, index) => (
               <tr
                 key={index}
-                className="border-b border-[#2C3240] last:border-b-0"
+                className="border-b border-[#2C3240] align-top last:border-b-0"
               >
-                <td className="px-4 py-3 font-mono text-[9px] text-[#596174]">
+                <td className="px-3 py-3 font-mono text-[9px] text-[#596174] sm:px-4">
                   {index + 1}
                 </td>
 
@@ -336,15 +348,17 @@ function RecordsPreview({
                   (column) => (
                     <td
                       key={column}
-                      className="max-w-[260px] truncate px-4 py-3 text-xs"
+                      className="w-[180px] max-w-[220px] px-3 py-3 text-xs sm:px-4"
                     >
-                      <RecordValue
-                        value={
-                          record?.[
-                            column
-                          ]
-                        }
-                      />
+                      <div className="max-w-[220px] overflow-hidden break-words">
+                        <RecordValue
+                          value={
+                            record?.[
+                              column
+                            ]
+                          }
+                        />
+                      </div>
                     </td>
                   )
                 )}
@@ -630,97 +644,112 @@ function DatasetDetail({
     );
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-[#0B0E14]/95 backdrop-blur-sm">
-      <div className="mx-auto min-h-screen w-full max-w-7xl border-x border-[#2C3240] bg-[#0E1118]">
+    <div className="fixed inset-0 z-50 h-[100dvh] w-full max-w-full overflow-x-hidden overflow-y-auto bg-[#0B0E14]/95 backdrop-blur-sm">
+      <div className="mx-auto min-h-[100dvh] w-full max-w-7xl overflow-x-hidden border-x border-[#2C3240] bg-[#0E1118]">
 
-        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[#2C3240] bg-[#0E1118]/95 px-5 py-4 backdrop-blur sm:px-8">
+        <div className="sticky top-0 z-10 flex min-w-0 items-center justify-between gap-3 border-b border-[#2C3240] bg-[#0E1118]/95 px-4 py-3 backdrop-blur sm:px-8 sm:py-4">
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.14em] text-[#697183] transition hover:text-[#E1E4EA]"
+            className="inline-flex min-w-0 max-w-full items-center gap-2 font-mono text-[9px] uppercase tracking-[0.14em] text-[#697183] transition hover:text-[#E1E4EA]"
           >
-            <ChevronLeft size={14} />
-            Back to datasets
+            <ChevronLeft
+              size={14}
+              className="shrink-0"
+            />
+
+            <span className="truncate">
+              Back to datasets
+            </span>
           </button>
 
           <button
             type="button"
             onClick={onClose}
-            className="border border-[#303746] p-2 text-[#697183] transition hover:border-[#41496A] hover:text-[#E1E4EA]"
+            aria-label="Close dataset"
+            className="shrink-0 border border-[#303746] p-2 text-[#697183] transition hover:border-[#41496A] hover:text-[#E1E4EA]"
           >
             <X size={15} />
           </button>
         </div>
 
-        <div className="p-5 sm:p-8 lg:p-10">
+        <div className="min-w-0 p-4 sm:p-8 lg:p-10">
 
           {error && (
-            <div className="mb-7 flex items-start gap-3 border border-[#49323A] bg-[#21191E] px-4 py-3 text-sm text-[#C88B91]">
+            <div className="mb-7 flex min-w-0 items-start gap-3 overflow-hidden border border-[#49323A] bg-[#21191E] px-4 py-3 text-sm text-[#C88B91]">
               <AlertTriangle
                 size={15}
                 className="mt-0.5 shrink-0"
               />
-              <span>{error}</span>
+
+              <span className="min-w-0 break-words">
+                {error}
+              </span>
             </div>
           )}
 
-          <div className="flex flex-col justify-between gap-7 border-b border-[#2C3240] pb-8 lg:flex-row lg:items-start">
+          <div className="flex min-w-0 flex-col justify-between gap-7 border-b border-[#2C3240] pb-8 lg:flex-row lg:items-start">
 
-            <div>
-              <div className="flex flex-wrap items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center border border-[#303746] bg-[#151922]">
+            <div className="min-w-0">
+              <div className="flex min-w-0 flex-wrap items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center border border-[#303746] bg-[#151922]">
                   <FormatIcon
                     size={17}
                     className="text-[#8C9AFF]"
                   />
                 </div>
 
-                <div>
+                <div className="min-w-0">
                   <div className="font-mono text-[8px] uppercase tracking-[0.18em] text-[#697183]">
                     Dataset
                   </div>
 
-                  <h1 className="mt-1 break-all font-display text-3xl font-semibold tracking-[-0.05em] text-[#E6E8EF] sm:text-4xl">
+                  <h1 className="mt-1 max-w-full break-words font-display text-2xl font-semibold tracking-[-0.05em] text-[#E6E8EF] sm:text-4xl">
                     {dataset.name}
                   </h1>
                 </div>
               </div>
 
               {dataset.description && (
-                <p className="mt-5 max-w-2xl text-sm leading-7 text-[#697183]">
+                <p className="mt-5 max-w-2xl break-words text-sm leading-7 text-[#697183]">
                   {dataset.description}
                 </p>
               )}
 
-              <div className="mt-5 flex flex-wrap gap-2">
-                <span className="border border-[#303746] bg-[#11151E] px-2.5 py-1.5 font-mono text-[8px] uppercase tracking-[0.12em] text-[#858D9D]">
+              <div className="mt-5 flex min-w-0 flex-wrap gap-2">
+                <span className="max-w-full break-all border border-[#303746] bg-[#11151E] px-2.5 py-1.5 font-mono text-[8px] uppercase tracking-[0.12em] text-[#858D9D]">
                   {formatLabel(
                     dataset.format
                   )}
                 </span>
 
-                <span className="border border-[#303746] bg-[#11151E] px-2.5 py-1.5 font-mono text-[8px] uppercase tracking-[0.12em] text-[#858D9D]">
+                <span className="max-w-full break-all border border-[#303746] bg-[#11151E] px-2.5 py-1.5 font-mono text-[8px] uppercase tracking-[0.12em] text-[#858D9D]">
                   v{dataset.latest_version}
                 </span>
 
-                <span className="border border-[#303746] bg-[#11151E] px-2.5 py-1.5 font-mono text-[8px] uppercase tracking-[0.12em] text-[#858D9D]">
+                <span className="max-w-full break-all border border-[#303746] bg-[#11151E] px-2.5 py-1.5 font-mono text-[8px] uppercase tracking-[0.12em] text-[#858D9D]">
                   Fixture ready
                 </span>
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-2">
-              <label className="inline-flex cursor-pointer items-center gap-2 border border-[#303746] bg-[#11151E] px-4 py-2.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[#AEB5C5] transition hover:border-[#41496A] hover:text-[#E1E4EA]">
+            <div className="flex w-full min-w-0 flex-col gap-2 sm:flex-row sm:flex-wrap lg:w-auto lg:justify-end">
+              <label className="inline-flex min-w-0 cursor-pointer items-center justify-center gap-2 border border-[#303746] bg-[#11151E] px-4 py-2.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[#AEB5C5] transition hover:border-[#41496A] hover:text-[#E1E4EA]">
                 {versionUploading ? (
                   <Loader2
                     size={14}
-                    className="animate-spin"
+                    className="shrink-0 animate-spin"
                   />
                 ) : (
-                  <RefreshCw size={14} />
+                  <RefreshCw
+                    size={14}
+                    className="shrink-0"
+                  />
                 )}
 
-                New version
+                <span className="truncate">
+                  New version
+                </span>
 
                 <input
                   type="file"
@@ -739,15 +768,18 @@ function DatasetDetail({
                 type="button"
                 onClick={download}
                 disabled={downloading}
-                className="inline-flex items-center gap-2 border border-[#303746] bg-[#11151E] px-4 py-2.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[#AEB5C5] transition hover:border-[#41496A] hover:text-[#E1E4EA] disabled:opacity-40"
+                className="inline-flex min-w-0 items-center justify-center gap-2 border border-[#303746] bg-[#11151E] px-4 py-2.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[#AEB5C5] transition hover:border-[#41496A] hover:text-[#E1E4EA] disabled:opacity-40"
               >
                 {downloading ? (
                   <Loader2
                     size={14}
-                    className="animate-spin"
+                    className="shrink-0 animate-spin"
                   />
                 ) : (
-                  <Download size={14} />
+                  <Download
+                    size={14}
+                    className="shrink-0"
+                  />
                 )}
 
                 Download
@@ -757,15 +789,18 @@ function DatasetDetail({
                 type="button"
                 onClick={deleteDataset}
                 disabled={deleting}
-                className="inline-flex items-center gap-2 border border-[#59343B] bg-[#2A1C21] px-4 py-2.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[#C88B91] transition hover:border-[#6A3C45] hover:bg-[#312026] disabled:opacity-40"
+                className="inline-flex min-w-0 items-center justify-center gap-2 border border-[#59343B] bg-[#2A1C21] px-4 py-2.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[#C88B91] transition hover:border-[#6A3C45] hover:bg-[#312026] disabled:opacity-40"
               >
                 {deleting ? (
                   <Loader2
                     size={14}
-                    className="animate-spin"
+                    className="shrink-0 animate-spin"
                   />
                 ) : (
-                  <Trash2 size={14} />
+                  <Trash2
+                    size={14}
+                    className="shrink-0"
+                  />
                 )}
 
                 Delete
@@ -773,49 +808,49 @@ function DatasetDetail({
             </div>
           </div>
 
-          <div className="mt-8 grid grid-cols-2 border border-[#2C3240] sm:grid-cols-4">
+          <div className="mt-8 grid min-w-0 grid-cols-2 border border-[#2C3240] sm:grid-cols-4">
 
-            <div className="border-r border-b border-[#2C3240] p-5 sm:border-b-0">
+            <div className="min-w-0 border-r border-b border-[#2C3240] p-4 sm:border-b-0 sm:p-5">
               <div className="font-mono text-[8px] uppercase tracking-[0.16em] text-[#596174]">
                 Records
               </div>
 
-              <div className="mt-3 font-display text-2xl font-semibold text-[#E1E4EA]">
+              <div className="mt-3 break-words font-display text-2xl font-semibold text-[#E1E4EA]">
                 {Number(
                   dataset.record_count || 0
                 ).toLocaleString()}
               </div>
             </div>
 
-            <div className="border-b border-[#2C3240] p-5 sm:border-b-0 sm:border-r">
+            <div className="min-w-0 border-b border-[#2C3240] p-4 sm:border-b-0 sm:border-r sm:p-5">
               <div className="font-mono text-[8px] uppercase tracking-[0.16em] text-[#596174]">
                 Fields
               </div>
 
-              <div className="mt-3 font-display text-2xl font-semibold text-[#E1E4EA]">
+              <div className="mt-3 break-words font-display text-2xl font-semibold text-[#E1E4EA]">
                 {dataset.field_count ||
                   0}
               </div>
             </div>
 
-            <div className="border-r border-[#2C3240] p-5">
+            <div className="min-w-0 border-r border-[#2C3240] p-4 sm:p-5">
               <div className="font-mono text-[8px] uppercase tracking-[0.16em] text-[#596174]">
                 Size
               </div>
 
-              <div className="mt-3 font-display text-2xl font-semibold text-[#E1E4EA]">
+              <div className="mt-3 break-words font-display text-2xl font-semibold text-[#E1E4EA]">
                 {formatBytes(
                   dataset.size_bytes
                 )}
               </div>
             </div>
 
-            <div className="p-5">
+            <div className="min-w-0 p-4 sm:p-5">
               <div className="font-mono text-[8px] uppercase tracking-[0.16em] text-[#596174]">
                 Updated
               </div>
 
-              <div className="mt-3 text-xs text-[#858D9D]">
+              <div className="mt-3 break-words text-xs text-[#858D9D]">
                 {formatRelativeDate(
                   dataset.updated_at
                 )}
@@ -826,34 +861,46 @@ function DatasetDetail({
 
           {(duplicateCount > 0 ||
             emptyFieldCount > 0) && (
-            <div className="mt-5 flex flex-wrap gap-3">
+            <div className="mt-5 flex min-w-0 flex-wrap gap-3">
               {duplicateCount > 0 && (
-                <div className="inline-flex items-center gap-2 border border-[#493F2E] bg-[#211D16] px-3 py-2 font-mono text-[8px] uppercase tracking-[0.12em] text-[#B9A77C]">
-                  <AlertTriangle size={12} />
-                  {duplicateCount} duplicate
-                  {duplicateCount === 1
-                    ? ""
-                    : "s"}
+                <div className="inline-flex max-w-full items-center gap-2 break-words border border-[#493F2E] bg-[#211D16] px-3 py-2 font-mono text-[8px] uppercase tracking-[0.12em] text-[#B9A77C]">
+                  <AlertTriangle
+                    size={12}
+                    className="shrink-0"
+                  />
+
+                  <span>
+                    {duplicateCount} duplicate
+                    {duplicateCount === 1
+                      ? ""
+                      : "s"}
+                  </span>
                 </div>
               )}
 
               {emptyFieldCount > 0 && (
-                <div className="inline-flex items-center gap-2 border border-[#493F2E] bg-[#211D16] px-3 py-2 font-mono text-[8px] uppercase tracking-[0.12em] text-[#B9A77C]">
-                  <AlertTriangle size={12} />
-                  {emptyFieldCount} empty field
-                  {emptyFieldCount === 1
-                    ? ""
-                    : "s"}
+                <div className="inline-flex max-w-full items-center gap-2 break-words border border-[#493F2E] bg-[#211D16] px-3 py-2 font-mono text-[8px] uppercase tracking-[0.12em] text-[#B9A77C]">
+                  <AlertTriangle
+                    size={12}
+                    className="shrink-0"
+                  />
+
+                  <span>
+                    {emptyFieldCount} empty field
+                    {emptyFieldCount === 1
+                      ? ""
+                      : "s"}
+                  </span>
                 </div>
               )}
             </div>
           )}
 
-          <div className="mt-10 grid gap-8 xl:grid-cols-[1.4fr_0.8fr]">
+          <div className="mt-10 grid min-w-0 gap-8 xl:grid-cols-[minmax(0,1.4fr)_minmax(280px,0.8fr)]">
 
-            <section>
-              <div className="mb-4 flex items-end justify-between gap-4">
-                <div>
+            <section className="min-w-0">
+              <div className="mb-4 flex min-w-0 items-end justify-between gap-4">
+                <div className="min-w-0">
                   <div className="font-mono text-[8px] uppercase tracking-[0.18em] text-[#596174]">
                     Data explorer
                   </div>
@@ -863,15 +910,15 @@ function DatasetDetail({
                   </h2>
                 </div>
 
-                <div className="font-mono text-[8px] uppercase tracking-[0.12em] text-[#596174]">
+                <div className="shrink-0 font-mono text-[8px] uppercase tracking-[0.12em] text-[#596174]">
                   {totalRecords.toLocaleString()} matches
                 </div>
               </div>
 
-              <div className="mb-4 flex items-center border border-[#303746] bg-[#11151E]">
+              <div className="mb-4 flex min-w-0 items-center border border-[#303746] bg-[#11151E]">
                 <Search
                   size={14}
-                  className="ml-3 text-[#596174]"
+                  className="ml-3 shrink-0 text-[#596174]"
                 />
 
                 <input
@@ -883,7 +930,7 @@ function DatasetDetail({
                     );
                   }}
                   placeholder="Search records..."
-                  className="w-full bg-transparent px-3 py-3 text-xs text-[#C2C6D0] outline-none placeholder:text-[#596174]"
+                  className="min-w-0 w-full bg-transparent px-3 py-3 text-xs text-[#C2C6D0] outline-none placeholder:text-[#596174]"
                 />
 
                 {search && (
@@ -893,7 +940,7 @@ function DatasetDetail({
                       setOffset(0);
                       setSearch("");
                     }}
-                    className="mr-2 p-1 text-[#596174] hover:text-[#E1E4EA]"
+                    className="mr-2 shrink-0 p-1 text-[#596174] hover:text-[#E1E4EA]"
                   >
                     <X size={13} />
                   </button>
@@ -908,13 +955,13 @@ function DatasetDetail({
               />
 
               {totalRecords > 0 && (
-                <div className="mt-4 flex items-center justify-between border border-[#2C3240] bg-[#11151E] px-4 py-3">
-                  <span className="font-mono text-[8px] uppercase tracking-[0.12em] text-[#596174]">
+                <div className="mt-4 flex min-w-0 items-center justify-between gap-4 border border-[#2C3240] bg-[#11151E] px-3 py-3 sm:px-4">
+                  <span className="min-w-0 truncate font-mono text-[8px] uppercase tracking-[0.12em] text-[#596174]">
                     Page {currentPage} /{" "}
                     {totalPages}
                   </span>
 
-                  <div className="flex gap-2">
+                  <div className="flex shrink-0 gap-2">
                     <button
                       type="button"
                       disabled={
@@ -957,9 +1004,9 @@ function DatasetDetail({
               )}
             </section>
 
-            <aside className="space-y-8">
+            <aside className="min-w-0 space-y-8">
 
-              <section>
+              <section className="min-w-0">
                 <div className="mb-4">
                   <div className="font-mono text-[8px] uppercase tracking-[0.18em] text-[#596174]">
                     Structure
@@ -977,9 +1024,9 @@ function DatasetDetail({
                 />
               </section>
 
-              <section>
-                <div className="mb-4 flex items-end justify-between">
-                  <div>
+              <section className="min-w-0">
+                <div className="mb-4 flex min-w-0 items-end justify-between gap-4">
+                  <div className="min-w-0">
                     <div className="font-mono text-[8px] uppercase tracking-[0.18em] text-[#596174]">
                       Dataset history
                     </div>
@@ -991,16 +1038,16 @@ function DatasetDetail({
 
                   <History
                     size={15}
-                    className="text-[#596174]"
+                    className="shrink-0 text-[#596174]"
                   />
                 </div>
 
-                <div className="border border-[#2C3240]">
+                <div className="w-full max-w-full overflow-hidden border border-[#2C3240]">
                   {loadingVersions ? (
-                    <div className="flex items-center gap-2 p-5 font-mono text-[8px] uppercase tracking-[0.12em] text-[#596174]">
+                    <div className="flex min-w-0 items-center gap-2 p-5 font-mono text-[8px] uppercase tracking-[0.12em] text-[#596174]">
                       <Loader2
                         size={12}
-                        className="animate-spin"
+                        className="shrink-0 animate-spin"
                       />
                       Loading history
                     </div>
@@ -1016,9 +1063,9 @@ function DatasetDetail({
                           key={
                             version.id
                           }
-                          className="border-b border-[#2C3240] p-4 last:border-b-0"
+                          className="min-w-0 border-b border-[#2C3240] p-4 last:border-b-0"
                         >
-                          <div className="flex items-center justify-between">
+                          <div className="flex min-w-0 items-center justify-between gap-3">
                             <span className="font-mono text-[10px] text-[#C2C6D0]">
                               v
                               {
@@ -1028,14 +1075,14 @@ function DatasetDetail({
 
                             {version.version ===
                               dataset.latest_version && (
-                              <span className="font-mono text-[7px] uppercase tracking-[0.12em] text-[#8C9AFF]">
+                              <span className="shrink-0 font-mono text-[7px] uppercase tracking-[0.12em] text-[#8C9AFF]">
                                 Current
                               </span>
                             )}
                           </div>
 
-                          <div className="mt-2 flex items-center justify-between gap-3">
-                            <span className="text-xs text-[#697183]">
+                          <div className="mt-2 flex min-w-0 flex-wrap items-center justify-between gap-3">
+                            <span className="min-w-0 break-words text-xs text-[#697183]">
                               {Number(
                                 version.record_count ||
                                   0
@@ -1043,7 +1090,7 @@ function DatasetDetail({
                               records
                             </span>
 
-                            <span className="font-mono text-[8px] text-[#596174]">
+                            <span className="shrink-0 font-mono text-[8px] text-[#596174]">
                               {formatRelativeDate(
                                 version.created_at
                               )}
@@ -1056,34 +1103,48 @@ function DatasetDetail({
                 </div>
               </section>
 
-              <section className="border border-[#2C3240] bg-[#151922] p-5">
-                <div className="flex items-center gap-2 font-mono text-[8px] uppercase tracking-[0.16em] text-[#596174]">
-                  <Clock3 size={12} />
-                  Dataset lifecycle
+              <section className="min-w-0 border border-[#2C3240] bg-[#151922] p-4 sm:p-5">
+                <div className="flex min-w-0 items-center gap-2 font-mono text-[8px] uppercase tracking-[0.16em] text-[#596174]">
+                  <Clock3
+                    size={12}
+                    className="shrink-0"
+                  />
+                  <span>
+                    Dataset lifecycle
+                  </span>
                 </div>
 
                 <div className="mt-5 space-y-3 text-xs leading-6 text-[#697183]">
-                  <div className="flex justify-between gap-4 border-b border-[#2C3240] pb-3">
-                    <span>Created</span>
-                    <span className="text-right text-[#858D9D]">
+                  <div className="flex min-w-0 flex-col gap-1 border-b border-[#2C3240] pb-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                    <span className="shrink-0">
+                      Created
+                    </span>
+
+                    <span className="break-words text-left text-[#858D9D] sm:text-right">
                       {formatDate(
                         dataset.created_at
                       )}
                     </span>
                   </div>
 
-                  <div className="flex justify-between gap-4 border-b border-[#2C3240] pb-3">
-                    <span>Updated</span>
-                    <span className="text-right text-[#858D9D]">
+                  <div className="flex min-w-0 flex-col gap-1 border-b border-[#2C3240] pb-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                    <span className="shrink-0">
+                      Updated
+                    </span>
+
+                    <span className="break-words text-left text-[#858D9D] sm:text-right">
                       {formatDate(
                         dataset.updated_at
                       )}
                     </span>
                   </div>
 
-                  <div className="flex justify-between gap-4">
-                    <span>Latest version</span>
-                    <span className="font-mono text-[#858D9D]">
+                  <div className="flex min-w-0 flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                    <span className="shrink-0">
+                      Latest version
+                    </span>
+
+                    <span className="font-mono break-words text-[#858D9D] sm:text-right">
                       v
                       {
                         dataset.latest_version
@@ -1311,25 +1372,30 @@ export default function Datasets({
     );
 
   return (
-    <div>
+    <div className="min-w-0 max-w-full overflow-x-hidden">
       <PageHeader
         eyebrow="03 / Dataset Studio"
         title="Project data."
         description="Manage datasets, fixtures and seed data for your application. Inspect structure, preview records, track versions and keep test inputs close to the code they support."
         action={
-          <label className="inline-flex cursor-pointer items-center gap-2 border border-[#41496A] bg-[#7181FF] px-4 py-2.5 font-mono text-[10px] uppercase tracking-[0.1em] text-white transition hover:bg-[#8492FF]">
+          <label className="inline-flex w-full cursor-pointer items-center justify-center gap-2 border border-[#41496A] bg-[#7181FF] px-4 py-2.5 font-mono text-[10px] uppercase tracking-[0.1em] text-white transition hover:bg-[#8492FF] sm:w-auto">
             {uploading ? (
               <Loader2
                 size={15}
-                className="animate-spin"
+                className="shrink-0 animate-spin"
               />
             ) : (
-              <Upload size={15} />
+              <Upload
+                size={15}
+                className="shrink-0"
+              />
             )}
 
-            {uploading
-              ? "Uploading"
-              : "Upload dataset"}
+            <span className="truncate">
+              {uploading
+                ? "Uploading"
+                : "Upload dataset"}
+            </span>
 
             <input
               type="file"
@@ -1345,45 +1411,48 @@ export default function Datasets({
       />
 
       {error && (
-        <div className="mt-8 flex items-start gap-3 border border-[#49323A] bg-[#21191E] px-4 py-3 text-sm text-[#C88B91]">
+        <div className="mt-8 flex min-w-0 items-start gap-3 overflow-hidden border border-[#49323A] bg-[#21191E] px-4 py-3 text-sm text-[#C88B91]">
           <AlertTriangle
             size={15}
             className="mt-0.5 shrink-0"
           />
-          <span>{error}</span>
+
+          <span className="min-w-0 break-words">
+            {error}
+          </span>
         </div>
       )}
 
       {!loading &&
         datasets.length > 0 && (
-          <div className="mt-8 grid grid-cols-2 border border-[#2C3240] sm:grid-cols-4">
+          <div className="mt-8 grid min-w-0 grid-cols-2 border border-[#2C3240] sm:grid-cols-4">
 
-            <div className="border-r border-b border-[#2C3240] p-5 sm:border-b-0">
+            <div className="min-w-0 border-r border-b border-[#2C3240] p-4 sm:border-b-0 sm:p-5">
               <div className="font-mono text-[8px] uppercase tracking-[0.16em] text-[#596174]">
                 Datasets
               </div>
 
-              <div className="mt-3 font-display text-2xl font-semibold text-[#E1E4EA]">
+              <div className="mt-3 break-words font-display text-2xl font-semibold text-[#E1E4EA]">
                 {datasets.length}
               </div>
             </div>
 
-            <div className="border-b border-[#2C3240] p-5 sm:border-b-0 sm:border-r">
+            <div className="min-w-0 border-b border-[#2C3240] p-4 sm:border-b-0 sm:border-r sm:p-5">
               <div className="font-mono text-[8px] uppercase tracking-[0.16em] text-[#596174]">
                 Records
               </div>
 
-              <div className="mt-3 font-display text-2xl font-semibold text-[#E1E4EA]">
+              <div className="mt-3 break-words font-display text-2xl font-semibold text-[#E1E4EA]">
                 {totalRecords.toLocaleString()}
               </div>
             </div>
 
-            <div className="border-r border-[#2C3240] p-5">
+            <div className="min-w-0 border-r border-[#2C3240] p-4 sm:p-5">
               <div className="font-mono text-[8px] uppercase tracking-[0.16em] text-[#596174]">
                 Formats
               </div>
 
-              <div className="mt-3 font-display text-2xl font-semibold text-[#E1E4EA]">
+              <div className="mt-3 break-words font-display text-2xl font-semibold text-[#E1E4EA]">
                 {
                   new Set(
                     datasets.map(
@@ -1395,17 +1464,20 @@ export default function Datasets({
               </div>
             </div>
 
-            <div className="p-5">
+            <div className="min-w-0 p-4 sm:p-5">
               <div className="font-mono text-[8px] uppercase tracking-[0.16em] text-[#596174]">
                 Workspace
               </div>
 
-              <div className="mt-3 flex items-center gap-2 text-xs text-[#858D9D]">
+              <div className="mt-3 flex min-w-0 items-center gap-2 text-xs text-[#858D9D]">
                 <Database
                   size={14}
-                  className="text-[#7181FF]"
+                  className="shrink-0 text-[#7181FF]"
                 />
-                Project data
+
+                <span className="min-w-0 truncate">
+                  Project data
+                </span>
               </div>
             </div>
 
@@ -1423,10 +1495,10 @@ export default function Datasets({
           />
         </div>
       ) : (
-        <div className="mt-10">
+        <div className="mt-10 min-w-0">
 
-          <div className="mb-5 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-            <div>
+          <div className="mb-5 flex min-w-0 flex-col justify-between gap-4 sm:flex-row sm:items-center">
+            <div className="min-w-0">
               <div className="font-mono text-[8px] uppercase tracking-[0.18em] text-[#596174]">
                 Project datasets
               </div>
@@ -1440,10 +1512,10 @@ export default function Datasets({
               </div>
             </div>
 
-            <div className="flex w-full items-center border border-[#303746] bg-[#11151E] sm:max-w-xs">
+            <div className="flex min-w-0 w-full items-center border border-[#303746] bg-[#11151E] sm:max-w-xs">
               <Search
                 size={14}
-                className="ml-3 text-[#596174]"
+                className="ml-3 shrink-0 text-[#596174]"
               />
 
               <input
@@ -1454,14 +1526,27 @@ export default function Datasets({
                   )
                 }
                 placeholder="Search datasets..."
-                className="w-full bg-transparent px-3 py-2.5 text-xs text-[#C2C6D0] outline-none placeholder:text-[#596174]"
+                className="min-w-0 w-full bg-transparent px-3 py-2.5 text-xs text-[#C2C6D0] outline-none placeholder:text-[#596174]"
               />
+
+              {search && (
+                <button
+                  type="button"
+                  onClick={() =>
+                    setSearch("")
+                  }
+                  className="mr-2 shrink-0 p-1 text-[#596174] hover:text-[#E1E4EA]"
+                  aria-label="Clear dataset search"
+                >
+                  <X size={13} />
+                </button>
+              )}
             </div>
           </div>
 
           {filteredDatasets.length ===
           0 ? (
-            <div className="border border-[#2C3240] bg-[#151922] p-8 text-center">
+            <div className="min-w-0 overflow-hidden border border-[#2C3240] bg-[#151922] p-8 text-center">
               <Search
                 size={18}
                 className="mx-auto text-[#596174]"
@@ -1471,13 +1556,13 @@ export default function Datasets({
                 No matching datasets
               </div>
 
-              <div className="mt-2 text-sm text-[#697183]">
+              <div className="mt-2 break-words text-sm text-[#697183]">
                 Try a different dataset name,
                 description or format.
               </div>
             </div>
           ) : (
-            <div className="grid gap-4 lg:grid-cols-2">
+            <div className="grid min-w-0 gap-4 lg:grid-cols-2">
 
               {filteredDatasets.map(
                 (dataset) => {
@@ -1503,9 +1588,9 @@ export default function Datasets({
                           dataset
                         )
                       }
-                      className="group text-left border border-[#2C3240] bg-[#11151E] p-5 transition hover:border-[#41496A] hover:bg-[#151922]"
+                      className="group min-w-0 max-w-full overflow-hidden border border-[#2C3240] bg-[#11151E] p-4 text-left transition hover:border-[#41496A] hover:bg-[#151922] sm:p-5"
                     >
-                      <div className="flex items-start justify-between gap-5">
+                      <div className="flex min-w-0 items-start justify-between gap-3 sm:gap-5">
 
                         <div className="flex min-w-0 items-start gap-3">
 
@@ -1517,13 +1602,13 @@ export default function Datasets({
                           </div>
 
                           <div className="min-w-0">
-                            <div className="truncate font-display text-lg font-semibold tracking-[-0.03em] text-[#E1E4EA]">
+                            <div className="max-w-full overflow-hidden break-words font-display text-lg font-semibold tracking-[-0.03em] text-[#E1E4EA]">
                               {
                                 dataset.name
                               }
                             </div>
 
-                            <div className="mt-1 font-mono text-[8px] uppercase tracking-[0.13em] text-[#596174]">
+                            <div className="mt-1 break-all font-mono text-[8px] uppercase tracking-[0.13em] text-[#596174]">
                               {
                                 formatLabel(
                                   dataset.format
@@ -1538,26 +1623,26 @@ export default function Datasets({
 
                         </div>
 
-                        <span className="shrink-0 font-mono text-[8px] uppercase tracking-[0.1em] text-[#7181FF] opacity-0 transition group-hover:opacity-100">
+                        <span className="hidden shrink-0 font-mono text-[8px] uppercase tracking-[0.1em] text-[#7181FF] opacity-0 transition group-hover:opacity-100 sm:inline">
                           Open
                         </span>
                       </div>
 
                       {dataset.description && (
-                        <p className="mt-5 line-clamp-2 text-xs leading-6 text-[#697183]">
+                        <p className="mt-5 line-clamp-2 break-words text-xs leading-6 text-[#697183]">
                           {
                             dataset.description
                           }
                         </p>
                       )}
 
-                      <div className="mt-5 grid grid-cols-3 border border-[#2C3240] bg-[#0E1118]">
-                        <div className="border-r border-[#2C3240] px-3 py-3">
+                      <div className="mt-5 grid min-w-0 grid-cols-3 border border-[#2C3240] bg-[#0E1118]">
+                        <div className="min-w-0 border-r border-[#2C3240] px-2 py-3 sm:px-3">
                           <div className="font-mono text-[7px] uppercase tracking-[0.12em] text-[#596174]">
                             Records
                           </div>
 
-                          <div className="mt-1.5 font-mono text-[10px] text-[#B7BDCA]">
+                          <div className="mt-1.5 break-words font-mono text-[10px] text-[#B7BDCA]">
                             {Number(
                               dataset.record_count ||
                                 0
@@ -1565,24 +1650,24 @@ export default function Datasets({
                           </div>
                         </div>
 
-                        <div className="border-r border-[#2C3240] px-3 py-3">
+                        <div className="min-w-0 border-r border-[#2C3240] px-2 py-3 sm:px-3">
                           <div className="font-mono text-[7px] uppercase tracking-[0.12em] text-[#596174]">
                             Fields
                           </div>
 
-                          <div className="mt-1.5 font-mono text-[10px] text-[#B7BDCA]">
+                          <div className="mt-1.5 break-words font-mono text-[10px] text-[#B7BDCA]">
                             {
                               dataset.field_count
                             }
                           </div>
                         </div>
 
-                        <div className="px-3 py-3">
+                        <div className="min-w-0 px-2 py-3 sm:px-3">
                           <div className="font-mono text-[7px] uppercase tracking-[0.12em] text-[#596174]">
                             Size
                           </div>
 
-                          <div className="mt-1.5 font-mono text-[10px] text-[#B7BDCA]">
+                          <div className="mt-1.5 break-words font-mono text-[10px] text-[#B7BDCA]">
                             {formatBytes(
                               dataset.size_bytes
                             )}
@@ -1590,7 +1675,7 @@ export default function Datasets({
                         </div>
                       </div>
 
-                      <div className="mt-5 flex items-center justify-between gap-4">
+                      <div className="mt-5 flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex min-w-0 flex-wrap gap-1.5">
                           {schemaFields
                             .slice(
@@ -1605,7 +1690,7 @@ export default function Datasets({
                                   key={
                                     field
                                   }
-                                  className="max-w-[120px] truncate border border-[#303746] px-2 py-1 font-mono text-[7px] text-[#596174]"
+                                  className="block max-w-[120px] overflow-hidden text-ellipsis whitespace-nowrap border border-[#303746] px-2 py-1 font-mono text-[7px] text-[#596174]"
                                 >
                                   {
                                     field
@@ -1616,7 +1701,7 @@ export default function Datasets({
 
                           {schemaFields.length >
                             4 && (
-                            <span className="border border-[#303746] px-2 py-1 font-mono text-[7px] text-[#596174]">
+                            <span className="shrink-0 border border-[#303746] px-2 py-1 font-mono text-[7px] text-[#596174]">
                               +
                               {schemaFields.length -
                                 4}
@@ -1624,7 +1709,7 @@ export default function Datasets({
                           )}
                         </div>
 
-                        <span className="shrink-0 font-mono text-[8px] text-[#596174]">
+                        <span className="shrink-0 font-mono text-[8px] text-[#596174] sm:text-right">
                           {formatRelativeDate(
                             dataset.updated_at
                           )}
